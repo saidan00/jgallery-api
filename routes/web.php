@@ -19,7 +19,9 @@ Route::get(/users/{id}, function($id) {
 })
 */
 
-Route::get('/', 'AlbumsController@index');
+Route::get('/', function () {
+  return view('welcome');
+});
 
 Route::resource('albums', 'AlbumsController');
 Route::post('albums/update_data', 'AlbumsController@update_data')->name('albums.update_data');
