@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/* Albums */
+Route::get('albums', 'Api\AlbumsController@index');
+
+// Get single album
+Route::get('albums/{id}', 'Api\AlbumsController@show');

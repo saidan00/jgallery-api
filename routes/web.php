@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/* 
+Route::get(/users/{id}, function($id) {
+  return $id;
+})
+*/
+
+Route::get('/', 'AlbumsController@index');
+
+Route::resource('albums', 'AlbumsController');
+Route::post('albums/update_data', 'AlbumsController@update_data')->name('albums.update_data');
+
+Route::post('pictures/add_data', 'PicturesController@add_data')->name('pictures.add_data');
+Route::post('pictures/update_data', 'PicturesController@update_data')->name('pictures.update_data');
+Route::post('pictures/delete_data', 'PicturesController@delete_data')->name('pictures.delete_data');
