@@ -27,3 +27,7 @@ Route::post('albums/update_data', 'AlbumsController@update_data')->name('albums.
 Route::post('pictures/add_data', 'PicturesController@add_data')->name('pictures.add_data');
 Route::post('pictures/update_data', 'PicturesController@update_data')->name('pictures.update_data');
 Route::post('pictures/delete_data', 'PicturesController@delete_data')->name('pictures.delete_data');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
