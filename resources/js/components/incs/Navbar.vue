@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="#">jGallery</a>
+      <a class="navbar-brand" href="/">jGallery</a>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->

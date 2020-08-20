@@ -19,7 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 /* Albums */
-Route::get('albums', 'Api\AlbumsController@index');
+// Route::get('albums', 'Api\AlbumsController@index');
 
 // Get single album
-Route::get('albums/{id}', 'Api\AlbumsController@show');
+// Route::get('albums/{id}', 'Api\AlbumsController@show');
+
+Route::resource('albums', 'Api\AlbumsController');
+
+Route::resource('pictures', 'Api\PicturesController');

@@ -6,12 +6,33 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// import store from './store'
+import store from './store'
 
-Vue.config.productionTip = false
+import './icons'
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+import { loadProgressBar } from "axios-progress-bar";
+import "axios-progress-bar/dist/nprogress.css";
+
+/* sweetalert2 */
+const optionsSweetalert2 = {
+  confirmButtonColor: '#41b882',
+  cancelButtonColor: '#ff7674',
+};
+
+Vue.use(VueSweetalert2, optionsSweetalert2);
+/* sweetalert2 */
+
+/* axios-progress-bar */
+loadProgressBar();
+/* axios-progress-bar */
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,
-  //   store,
+  store,
   render: h => h(App)
 }).$mount('#app')

@@ -19,17 +19,21 @@ Route::get(/users/{id}, function($id) {
 })
 */
 
-Route::get('/', function () {
-  return view('welcome');
-});
+Route::get('/{vue_capture?}', function () {
+ return view('index');
+})->where('vue_capture', '[\/\w\.-]*');
 
-Route::resource('albums', 'AlbumsController');
-Route::post('albums/update_data', 'AlbumsController@update_data')->name('albums.update_data');
+// Route::get('/', function () {
+//   return view('welcome');
+// });
 
-Route::post('pictures/add_data', 'PicturesController@add_data')->name('pictures.add_data');
-Route::post('pictures/update_data', 'PicturesController@update_data')->name('pictures.update_data');
-Route::post('pictures/delete_data', 'PicturesController@delete_data')->name('pictures.delete_data');
+// Route::resource('albums', 'AlbumsController');
+// Route::post('albums/update_data', 'AlbumsController@update_data')->name('albums.update_data');
 
-Auth::routes();
+// Route::post('pictures/add_data', 'PicturesController@add_data')->name('pictures.add_data');
+// Route::post('pictures/update_data', 'PicturesController@update_data')->name('pictures.update_data');
+// Route::post('pictures/delete_data', 'PicturesController@delete_data')->name('pictures.delete_data');
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');
