@@ -12804,7 +12804,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Navbar"
 });
@@ -12820,7 +12819,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -12859,8 +12872,49 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Gallery",
-  methods: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(["fetchAlbums"]),
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchAlbums", "storeAlbum"])), {}, {
+    showAddModal: function showAddModal() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _yield$_this$$swal, album;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.$swal({
+                  html: '<div class="form-group">' + '<input id="swal-input1" class="form-control" placeholder="Title">' + "</div>" + "<div>" + '<input id="swal-input2" class="form-control" placeholder="Cover image link">' + "</div>",
+                  focusConfirm: false,
+                  allowOutsideClick: false,
+                  showCancelButton: true,
+                  preConfirm: function preConfirm() {
+                    return {
+                      title: document.getElementById("swal-input1").value,
+                      coverImgLink: document.getElementById("swal-input2").value
+                    };
+                  }
+                });
+
+              case 2:
+                _yield$_this$$swal = _context.sent;
+                album = _yield$_this$$swal.value;
+
+                if (album) {
+                  _this.storeAlbum(album);
+                }
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    }
+  }),
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     albums: "getAllAlbums"
   }),
   created: function created() {
@@ -18061,33 +18115,14 @@ var staticRenderFns = [
       [
         _c("div", { staticClass: "container" }, [
           _c("a", { staticClass: "navbar-brand", attrs: { href: "/" } }, [
-            _vm._v("jGallery")
+            _c("span", [_vm._v("j")]),
+            _vm._v("Gallery\n    ")
           ]),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse navbar-collapse",
-              attrs: { id: "navbarSupportedContent" }
-            },
-            [
-              _c("ul", { staticClass: "navbar-nav mr-auto" }, [
-                _c("li", { staticClass: "nav-item" }, [
-                  _c("a", { staticClass: "nav-link", attrs: { href: "/" } }, [
-                    _vm._v("Home")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", { staticClass: "nav-item" }, [
-                  _c(
-                    "a",
-                    { staticClass: "nav-link", attrs: { href: "/about" } },
-                    [_vm._v("About")]
-                  )
-                ])
-              ])
-            ]
-          )
+          _c("div", {
+            staticClass: "collapse navbar-collapse",
+            attrs: { id: "navbarSupportedContent" }
+          })
         ])
       ]
     )
@@ -18120,12 +18155,12 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _vm._m(0),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-8" }, [
           _c(
-            "a",
+            "button",
             {
               staticClass: "btn btn-primary float-right mb-3",
-              attrs: { href: "/albums/create" }
+              on: { click: _vm.showAddModal }
             },
             [
               _c("font-awesome-icon", { attrs: { icon: "edit" } }),
@@ -18180,7 +18215,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6" }, [
+    return _c("div", { staticClass: "col-md-4" }, [
       _c("h1", [_vm._v("Albums")])
     ])
   }
@@ -34960,7 +34995,7 @@ var routes = [{
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
-  base: 'jgallery.test',
+  base: '/',
   routes: routes
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
@@ -35009,11 +35044,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _mixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixin */ "./resources/js/mixin/index.js");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../router */ "./resources/js/router/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -35086,7 +35123,7 @@ var actions = {
       }, _callee2);
     }))();
   },
-  storePicture: function storePicture(_ref3, picture) {
+  storeAlbum: function storeAlbum(_ref3, album) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
@@ -35095,19 +35132,18 @@ var actions = {
             case 0:
               commit = _ref3.commit;
               _context3.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/pictures", picture);
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/albums", album);
 
             case 3:
               response = _context3.sent;
-              console.log(response);
 
               if (response.status === 200) {
-                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture added');
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album added');
               }
 
-              commit('storePicture', response.data);
+              commit('storeAlbum', response.data);
 
-            case 7:
+            case 6:
             case "end":
               return _context3.stop();
           }
@@ -35115,7 +35151,7 @@ var actions = {
       }, _callee3);
     }))();
   },
-  updatePicture: function updatePicture(_ref4, picture) {
+  updateAlbum: function updateAlbum(_ref4, album) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -35124,16 +35160,16 @@ var actions = {
             case 0:
               commit = _ref4.commit;
               _context4.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("/api/pictures/".concat(picture.id), picture);
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("/api/albums/".concat(album.id), album);
 
             case 3:
               response = _context4.sent;
 
               if (response.status === 200) {
-                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture updated');
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album updated');
               }
 
-              commit('updatePicture', response.data);
+              commit('updateAlbum', response.data);
 
             case 6:
             case "end":
@@ -35143,7 +35179,7 @@ var actions = {
       }, _callee4);
     }))();
   },
-  destroyPicture: function destroyPicture(_ref5, id) {
+  destroyAlbum: function destroyAlbum(_ref5, id) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
       var commit, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
@@ -35152,10 +35188,94 @@ var actions = {
             case 0:
               commit = _ref5.commit;
               _context5.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/pictures/".concat(id));
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/albums/".concat(id));
 
             case 3:
               response = _context5.sent;
+
+              if (response.status === 200) {
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album deleted');
+              }
+
+              commit('destroyAlbum');
+
+            case 6:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }))();
+  },
+  storePicture: function storePicture(_ref6, picture) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref6.commit;
+              _context6.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/pictures", picture);
+
+            case 3:
+              response = _context6.sent;
+
+              if (response.status === 200) {
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture added');
+              }
+
+              commit('storePicture', response.data);
+
+            case 6:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }))();
+  },
+  updatePicture: function updatePicture(_ref7, picture) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              commit = _ref7.commit;
+              _context7.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("/api/pictures/".concat(picture.id), picture);
+
+            case 3:
+              response = _context7.sent;
+
+              if (response.status === 200) {
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture updated');
+              }
+
+              commit('updatePicture', response.data);
+
+            case 6:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7);
+    }))();
+  },
+  destroyPicture: function destroyPicture(_ref8, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              commit = _ref8.commit;
+              _context8.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/pictures/".concat(id));
+
+            case 3:
+              response = _context8.sent;
 
               if (response.status === 200) {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture deleted');
@@ -35165,10 +35285,10 @@ var actions = {
 
             case 6:
             case "end":
-              return _context5.stop();
+              return _context8.stop();
           }
         }
-      }, _callee5);
+      }, _callee8);
     }))();
   }
 };
@@ -35179,8 +35299,21 @@ var mutations = {
   setAlbum: function setAlbum(state, album) {
     return state.album = album;
   },
+  storeAlbum: function storeAlbum(state, album) {
+    state.albums.push(album);
+  },
+  updateAlbum: function updateAlbum(state, album) {
+    state.album.title = album.title;
+    state.album.coverImgLink = album.coverImgLink;
+  },
+  destroyAlbum: function destroyAlbum() {
+    _router__WEBPACK_IMPORTED_MODULE_3__["default"].push({
+      path: '/'
+    });
+  },
   storePicture: function storePicture(state, newPicture) {
     state.album.pictures.push(newPicture);
+    state.album.pictures_count++;
   },
   updatePicture: function updatePicture(state, newPicture) {
     var index = state.album.pictures.findIndex(function (oldPicture) {
@@ -35195,6 +35328,7 @@ var mutations = {
     state.album.pictures = state.album.pictures.filter(function (p) {
       return p.id !== id;
     });
+    state.album.pictures_count--;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -35227,12 +35361,10 @@ var actions = {
   startLoading: function startLoading(_ref) {
     var commit = _ref.commit;
     commit('setLoading', true);
-    console.log("startLoading");
   },
   doneLoading: function doneLoading(_ref2) {
     var commit = _ref2.commit;
     commit('setLoading', false);
-    console.log("doneLoading");
   }
 };
 var mutations = {

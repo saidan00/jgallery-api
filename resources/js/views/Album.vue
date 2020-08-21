@@ -4,16 +4,12 @@
       <font-awesome-icon icon="backward" />&nbsp;Go back
     </a>
 
+    <button class="btn btn-danger mb-3 float-right" @click="deleteAlbum">
+      <font-awesome-icon icon="trash" />&nbsp;Delete
+    </button>
+
     <div class="card">
       <div class="card-header">
-        <!-- <h2 id="album-title" class="d-inline-block" data-field="title">{{album.title}}</h2>
-        <sup>
-          <button @click="showAlbumEditModal" class="btn btn-light btn-sm" title="Edit">
-            <font-awesome-icon icon="edit" />
-          </button>
-        </sup>
-        <small>{{album.pictures_count}} pictures</small>-->
-
         <div class="d-flex align-items-center">
           <img class="mr-3 rounded" :src="album.coverImgLink" />
           <div class="lh-100">
@@ -125,6 +121,8 @@ export default {
   methods: {
     ...mapActions([
       "fetchAlbum",
+      "updateAlbum",
+      "destroyAlbum",
       "storePicture",
       "updatePicture",
       "destroyPicture",
@@ -192,17 +190,31 @@ export default {
         showCancelButton: true,
         preConfirm: () => {
           return {
+            id: this.album.id,
             title: document.getElementById("swal-input1").value,
             coverImgLink: document.getElementById("swal-input2").value,
           };
         },
       });
+
+      this.updateAlbum(album);
+    },
+    async deleteAlbum() {
+      this.$swal({
+        title: "Delete this album and all images below?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.value) {
+          this.destroyAlbum(this.album.id);
+        }
+      });
     },
     async addPicture() {
       let title = document.getElementById("picture-title").value;
       let imgLink = document.getElementById("picture-imgLink").value;
-
-      console.log(title);
 
       if (title && imgLink) {
         const picture = {
@@ -213,6 +225,8 @@ export default {
 
         this.startLoading();
         await this.storePicture(picture);
+        document.getElementById("picture-title").value = "";
+        document.getElementById("picture-imgLink").value = "";
         this.updatedPictureId = picture.id;
         this.doneLoading();
         setTimeout(function () {

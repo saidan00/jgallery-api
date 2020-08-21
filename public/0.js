@@ -131,10 +131,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -149,7 +145,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   props: ["id"],
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchAlbum", "storePicture", "updatePicture", "destroyPicture", "startLoading", "doneLoading"])), {}, {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchAlbum", "updateAlbum", "destroyAlbum", "storePicture", "updatePicture", "destroyPicture", "startLoading", "doneLoading"])), {}, {
     showEditModal: function showEditModal(pictureId) {
       var _this = this;
 
@@ -228,6 +224,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   showCancelButton: true,
                   preConfirm: function preConfirm() {
                     return {
+                      id: _this2.album.id,
                       title: document.getElementById("swal-input1").value,
                       coverImgLink: document.getElementById("swal-input2").value
                     };
@@ -238,7 +235,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _yield$_this2$$swal = _context2.sent;
                 album = _yield$_this2$$swal.value;
 
-              case 6:
+                _this2.updateAlbum(album);
+
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -246,50 +245,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     },
-    addPicture: function addPicture() {
+    deleteAlbum: function deleteAlbum() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var title, imgLink, picture;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                title = document.getElementById("picture-title").value;
-                imgLink = document.getElementById("picture-imgLink").value;
-                console.log(title);
+                _this3.$swal({
+                  title: "Delete this album and all images below?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Yes, delete it!"
+                }).then(function (result) {
+                  if (result.value) {
+                    _this3.destroyAlbum(_this3.album.id);
+                  }
+                });
 
-                if (!(title && imgLink)) {
-                  _context3.next = 13;
-                  break;
-                }
-
-                picture = {
-                  title: title,
-                  imgLink: imgLink,
-                  album_id: _this3.album.id
-                };
-
-                _this3.startLoading();
-
-                _context3.next = 8;
-                return _this3.storePicture(picture);
-
-              case 8:
-                _this3.updatedPictureId = picture.id;
-
-                _this3.doneLoading();
-
-                setTimeout(function () {
-                  this.updatedPictureId = -1;
-                }, 2000);
-                _context3.next = 14;
-                break;
-
-              case 13:
-                Object(_mixin__WEBPACK_IMPORTED_MODULE_3__["toast"])("error", "Title and image link cannot be empty");
-
-              case 14:
+              case 1:
               case "end":
                 return _context3.stop();
             }
@@ -297,15 +273,67 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee3);
       }))();
     },
-    deletePicture: function deletePicture(pictureId) {
+    addPicture: function addPicture() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var title, imgLink, picture;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this4.$swal({
+                title = document.getElementById("picture-title").value;
+                imgLink = document.getElementById("picture-imgLink").value;
+
+                if (!(title && imgLink)) {
+                  _context4.next = 14;
+                  break;
+                }
+
+                picture = {
+                  title: title,
+                  imgLink: imgLink,
+                  album_id: _this4.album.id
+                };
+
+                _this4.startLoading();
+
+                _context4.next = 7;
+                return _this4.storePicture(picture);
+
+              case 7:
+                document.getElementById("picture-title").value = "";
+                document.getElementById("picture-imgLink").value = "";
+                _this4.updatedPictureId = picture.id;
+
+                _this4.doneLoading();
+
+                setTimeout(function () {
+                  this.updatedPictureId = -1;
+                }, 2000);
+                _context4.next = 15;
+                break;
+
+              case 14:
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_3__["toast"])("error", "Title and image link cannot be empty");
+
+              case 15:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    deletePicture: function deletePicture(pictureId) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _this5.$swal({
                   title: "Are you sure?",
                   text: "You won't be able to revert this!",
                   icon: "warning",
@@ -313,16 +341,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   confirmButtonText: "Yes, delete it!"
                 }).then(function (result) {
                   if (result.value) {
-                    _this4.destroyPicture(pictureId);
+                    _this5.destroyPicture(pictureId);
                   }
                 });
 
               case 1:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }))();
     }
   }),
@@ -408,6 +436,19 @@ var render = function() {
       [
         _c("font-awesome-icon", { attrs: { icon: "backward" } }),
         _vm._v(" Go back\n  ")
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-danger mb-3 float-right",
+        on: { click: _vm.deleteAlbum }
+      },
+      [
+        _c("font-awesome-icon", { attrs: { icon: "trash" } }),
+        _vm._v(" Delete\n  ")
       ],
       1
     ),

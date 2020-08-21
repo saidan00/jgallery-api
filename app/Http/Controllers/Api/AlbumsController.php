@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Album;
 use App\Http\Resources\Album as AlbumResource;
+use App\Picture;
 
 class AlbumsController extends Controller {
     /**
@@ -36,7 +37,15 @@ class AlbumsController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        $album = new Album;
+
+        $album->title = $request->title;
+        $album->coverImgLink = $request->coverImgLink;
+        $album->description = $request->title;
+
+        $album->save();
+
+        return response($album, 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -77,7 +86,13 @@ class AlbumsController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        $album = Album::find($id);
+
+        $album->title = $request->title;
+        $album->coverImgLink = $request->coverImgLink;
+
+        $album->save();
+        return response($album, 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -87,6 +102,13 @@ class AlbumsController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $album = Album::find($id);
+
+        $album->delete();
+
+        // delete all pictures in this album
+        Picture::where('album_id', $id)->delete();
+
+        return response($album, 200)->header('Content-Type', 'text/plain');
     }
 }

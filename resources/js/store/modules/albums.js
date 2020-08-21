@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from '../../mixin';
+import router from '../../router';
 
 const state = {
   albums: [],
@@ -30,10 +31,35 @@ const actions = {
 
     commit('setAlbum', response.data.data);
   },
+  async storeAlbum({ commit }, album) {
+    const response = await axios.post(`/api/albums`, album);
+
+    if (response.status === 200) {
+      toast('success', 'Album added');
+    }
+
+    commit('storeAlbum', response.data);
+  },
+  async updateAlbum({ commit }, album) {
+    const response = await axios.put(`/api/albums/${album.id}`, album);
+
+    if (response.status === 200) {
+      toast('success', 'Album updated');
+    }
+
+    commit('updateAlbum', response.data);
+  },
+  async destroyAlbum({ commit }, id) {
+    const response = await axios.delete(`/api/albums/${id}`);
+
+    if (response.status === 200) {
+      toast('success', 'Album deleted');
+    }
+
+    commit('destroyAlbum');
+  },
   async storePicture({ commit }, picture) {
     const response = await axios.post(`/api/pictures`, picture);
-
-    console.log(response);
 
     if (response.status === 200) {
       toast('success', 'Picture added');
@@ -64,8 +90,19 @@ const actions = {
 const mutations = {
   setAlbums: (state, albums) => (state.albums = albums),
   setAlbum: (state, album) => (state.album = album),
+  storeAlbum: (state, album) => {
+    state.albums.push(album);
+  },
+  updateAlbum: (state, album) => {
+    state.album.title = album.title;
+    state.album.coverImgLink = album.coverImgLink;
+  },
+  destroyAlbum: () => {
+    router.push({ path: '/' });
+  },
   storePicture: (state, newPicture) => {
     state.album.pictures.push(newPicture);
+    state.album.pictures_count++;
   },
   updatePicture: (state, newPicture) => {
     const index = state.album.pictures.findIndex(oldPicture => oldPicture.id === newPicture.id);
@@ -76,6 +113,7 @@ const mutations = {
   },
   destroyPicture: (state, id) => {
     state.album.pictures = state.album.pictures.filter(p => p.id !== id);
+    state.album.pictures_count--;
   }
 };
 

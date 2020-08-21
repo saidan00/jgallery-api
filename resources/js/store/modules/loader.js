@@ -9,11 +9,9 @@ const getters = {
 const actions = {
   startLoading({ commit }) {
     commit('setLoading', true);
-    console.log("startLoading");
   },
   doneLoading({ commit }) {
     commit('setLoading', false);
-    console.log("doneLoading");
   },
 };
 

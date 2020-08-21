@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <h1>Albums</h1>
       </div>
-      <div class="col-md-6">
-        <a href="/albums/create" class="btn btn-primary float-right mb-3">
+      <div class="col-md-8">
+        <button class="btn btn-primary float-right mb-3" @click="showAddModal">
           <font-awesome-icon icon="edit" />&nbsp;Add
-        </a>
+        </button>
       </div>
     </div>
 
@@ -38,7 +38,33 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Gallery",
-  methods: mapActions(["fetchAlbums"]),
+  methods: {
+    ...mapActions(["fetchAlbums", "storeAlbum"]),
+    async showAddModal() {
+      let { value: album } = await this.$swal({
+        html:
+          '<div class="form-group">' +
+          '<input id="swal-input1" class="form-control" placeholder="Title">' +
+          "</div>" +
+          "<div>" +
+          '<input id="swal-input2" class="form-control" placeholder="Cover image link">' +
+          "</div>",
+        focusConfirm: false,
+        allowOutsideClick: false,
+        showCancelButton: true,
+        preConfirm: () => {
+          return {
+            title: document.getElementById("swal-input1").value,
+            coverImgLink: document.getElementById("swal-input2").value,
+          };
+        },
+      });
+
+      if (album) {
+        this.storeAlbum(album);
+      }
+    },
+  },
   computed: mapGetters({
     albums: "getAllAlbums",
   }),
