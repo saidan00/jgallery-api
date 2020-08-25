@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Picture;
+use Illuminate\Support\Facades\DB;
 
 class PicturesController extends Controller {
   /**
@@ -28,6 +29,7 @@ class PicturesController extends Controller {
     $picture->title = $request->title;
     $picture->imgLink = $request->imgLink;
     $picture->description = $request->title;
+    $picture->orderNumber = $request->orderNumber;
     $picture->album_id = $request->album_id;
 
     $picture->save();
@@ -72,6 +74,8 @@ class PicturesController extends Controller {
     $picture = Picture::find($id);
 
     $picture->delete();
+
+    Picture::where([['album_id', $picture->album_id], ['order_number', '>', $picture->orderNumber]])->update(['orderNumber' => DB::raw('orderNumber - 1')]);
 
     return response($picture, 200)->header('Content-Type', 'text/plain');
   }

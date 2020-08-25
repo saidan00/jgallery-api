@@ -17,7 +17,8 @@ class Picture extends JsonResource {
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'imgLink' => $this->imgLink
+            'imgLink' => $this->imgLink,
+            'orderNumber' => $this->orderNumber
         ];
     }
 

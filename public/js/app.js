@@ -35085,7 +35085,7 @@ var actions = {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Albums loaded');
               }
 
-              commit('setAlbums', response.data.data);
+              commit('setAlbums', response.data);
 
             case 6:
             case "end":
@@ -35113,7 +35113,7 @@ var actions = {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album loaded');
               }
 
-              commit('setAlbum', response.data.data);
+              commit('setAlbum', response.data);
 
             case 6:
             case "end":
@@ -35179,19 +35179,53 @@ var actions = {
       }, _callee4);
     }))();
   },
-  destroyAlbum: function destroyAlbum(_ref5, id) {
+  // destruct object received from component
+  updateOrderNumber: function updateOrderNumber(_ref5, _ref6) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-      var commit, response;
+      var commit, id, oldIndex, newIndex, response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               commit = _ref5.commit;
-              _context5.next = 3;
+              id = _ref6.id, oldIndex = _ref6.oldIndex, newIndex = _ref6.newIndex;
+              _context5.next = 4;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("/api/albums/updatePicturesOrderNumber/".concat(id), {
+                oldIndex: oldIndex,
+                newIndex: newIndex
+              });
+
+            case 4:
+              response = _context5.sent;
+              console.log(response);
+
+              if (response.status === 200) {
+                Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album updated');
+              }
+
+              commit('updateOrderNumber');
+
+            case 8:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }))();
+  },
+  destroyAlbum: function destroyAlbum(_ref7, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref7.commit;
+              _context6.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/albums/".concat(id));
 
             case 3:
-              response = _context5.sent;
+              response = _context6.sent;
 
               if (response.status === 200) {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Album deleted');
@@ -35201,25 +35235,25 @@ var actions = {
 
             case 6:
             case "end":
-              return _context5.stop();
+              return _context6.stop();
           }
         }
-      }, _callee5);
+      }, _callee6);
     }))();
   },
-  storePicture: function storePicture(_ref6, picture) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+  storePicture: function storePicture(_ref8, picture) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
       var commit, response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              commit = _ref6.commit;
-              _context6.next = 3;
+              commit = _ref8.commit;
+              _context7.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/api/pictures", picture);
 
             case 3:
-              response = _context6.sent;
+              response = _context7.sent;
 
               if (response.status === 200) {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture added');
@@ -35229,25 +35263,25 @@ var actions = {
 
             case 6:
             case "end":
-              return _context6.stop();
+              return _context7.stop();
           }
         }
-      }, _callee6);
+      }, _callee7);
     }))();
   },
-  updatePicture: function updatePicture(_ref7, picture) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+  updatePicture: function updatePicture(_ref9, picture) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
       var commit, response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
-              commit = _ref7.commit;
-              _context7.next = 3;
+              commit = _ref9.commit;
+              _context8.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.put("/api/pictures/".concat(picture.id), picture);
 
             case 3:
-              response = _context7.sent;
+              response = _context8.sent;
 
               if (response.status === 200) {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture updated');
@@ -35257,25 +35291,25 @@ var actions = {
 
             case 6:
             case "end":
-              return _context7.stop();
+              return _context8.stop();
           }
         }
-      }, _callee7);
+      }, _callee8);
     }))();
   },
-  destroyPicture: function destroyPicture(_ref8, id) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+  destroyPicture: function destroyPicture(_ref10, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
       var commit, response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
         while (1) {
-          switch (_context8.prev = _context8.next) {
+          switch (_context9.prev = _context9.next) {
             case 0:
-              commit = _ref8.commit;
-              _context8.next = 3;
+              commit = _ref10.commit;
+              _context9.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]("/api/pictures/".concat(id));
 
             case 3:
-              response = _context8.sent;
+              response = _context9.sent;
 
               if (response.status === 200) {
                 Object(_mixin__WEBPACK_IMPORTED_MODULE_2__["toast"])('success', 'Picture deleted');
@@ -35285,10 +35319,10 @@ var actions = {
 
             case 6:
             case "end":
-              return _context8.stop();
+              return _context9.stop();
           }
         }
-      }, _callee8);
+      }, _callee9);
     }))();
   }
 };
@@ -35305,6 +35339,9 @@ var mutations = {
   updateAlbum: function updateAlbum(state, album) {
     state.album.title = album.title;
     state.album.coverImgLink = album.coverImgLink;
+  },
+  updateOrderNumber: function updateOrderNumber(state) {
+    console.log('OK');
   },
   destroyAlbum: function destroyAlbum() {
     _router__WEBPACK_IMPORTED_MODULE_3__["default"].push({

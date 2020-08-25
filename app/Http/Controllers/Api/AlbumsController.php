@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Album;
 use App\Http\Resources\Album as AlbumResource;
 use App\Picture;
+use App\Http\Resources\Picture as PictureResource;
+use Illuminate\Support\Facades\DB;
 
 class AlbumsController extends Controller {
     /**
@@ -45,7 +47,7 @@ class AlbumsController extends Controller {
 
         $album->save();
 
-        return response($album, 200)->header('Content-Type', 'text/plain');
+        return new AlbumResource($album);
     }
 
     /**
@@ -56,9 +58,8 @@ class AlbumsController extends Controller {
      */
     public function show($id) {
         // Get picture
-        // $album = Album::find($id);
-        $album = Album::withCount('pictures')->get();
-        $album = $album->find($id);
+        $album = Album::withCount('pictures')->find($id);
+        $album->pictures = $album->pictures->sortBy('order_number');
 
         if ($album === null) {
             return response()->json(['message' => 'Not Found!'], 404);
@@ -92,7 +93,25 @@ class AlbumsController extends Controller {
         $album->coverImgLink = $request->coverImgLink;
 
         $album->save();
-        return response($album, 200)->header('Content-Type', 'text/plain');
+        return new AlbumResource($album);
+    }
+
+    public function updatePicturesOrderNumber(Request $request, $id) {
+        // get picture
+        $picture = Picture::where([['album_id', $id], ['order_number', $request->oldIndex]])->first();
+
+        // update new order number for the rest
+        if ($request->newIndex > $request->oldIndex) {
+            Picture::where('album_id', $id)->whereBetween('order_number', [$request->oldIndex + 1, $request->newIndex])->update(['order_number' => DB::raw('order_number - 1')]);
+        } else {
+            Picture::where('album_id', $id)->whereBetween('order_number', [$request->newIndex, $request->oldIndex - 1])->update(['order_number' => DB::raw('order_number + 1')]);
+        }
+
+        // update order number
+        $picture->orderNumber = $request->newIndex;
+        $picture->save();
+
+        return new PictureResource($picture);
     }
 
     /**
@@ -109,6 +128,6 @@ class AlbumsController extends Controller {
         // delete all pictures in this album
         Picture::where('album_id', $id)->delete();
 
-        return response($album, 200)->header('Content-Type', 'text/plain');
+        return new AlbumResource($album);
     }
 }

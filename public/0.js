@@ -145,7 +145,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   props: ["id"],
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchAlbum", "updateAlbum", "destroyAlbum", "storePicture", "updatePicture", "destroyPicture", "startLoading", "doneLoading"])), {}, {
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(["fetchAlbum", "updateAlbum", "destroyAlbum", "storePicture", "updatePicture", "updateOrderNumber", "destroyPicture", "startLoading", "doneLoading"])), {}, {
     showEditModal: function showEditModal(pictureId) {
       var _this = this;
 
@@ -293,6 +293,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 picture = {
                   title: title,
                   imgLink: imgLink,
+                  orderNumber: _this4.album.pictures_count,
                   album_id: _this4.album.id
                 };
 
@@ -352,6 +353,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }, _callee5);
       }))();
+    },
+    updateOrder: function updateOrder(evt) {
+      // if oldIndex === newIndex => do nothing
+      if (evt.oldIndex !== evt.newIndex) {
+        // passing object to store
+        this.updateOrderNumber({
+          id: this.album.id,
+          oldIndex: evt.oldIndex,
+          newIndex: evt.newIndex
+        });
+      }
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
@@ -377,7 +389,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.faded-in[data-v-ef645540] {\r\n  -webkit-animation-name: faded-in-data-v-ef645540;\r\n          animation-name: faded-in-data-v-ef645540;\r\n  -webkit-animation-duration: 1.5s;\r\n          animation-duration: 1.5s;\n}\n@-webkit-keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\n@keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\nimg[data-v-ef645540] {\r\n  width: 100px;\r\n  height: 100px;\r\n  -o-object-fit: cover;\r\n     object-fit: cover;\n}\r\n", ""]);
+exports.push([module.i, "\n.faded-in[data-v-ef645540] {\r\n  -webkit-animation-name: faded-in-data-v-ef645540;\r\n          animation-name: faded-in-data-v-ef645540;\r\n  -webkit-animation-duration: 1.5s;\r\n          animation-duration: 1.5s;\n}\n@-webkit-keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\n@keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\nimg[data-v-ef645540] {\r\n  width: 100px;\r\n  height: 100px;\r\n  -o-object-fit: cover;\r\n     object-fit: cover;\n}\ntbody tr[data-v-ef645540] {\r\n  cursor: move;\n}\r\n", ""]);
 
 // exports
 
@@ -511,7 +523,8 @@ var render = function() {
             _c(
               "draggable",
               {
-                attrs: { tag: "tbody" },
+                attrs: { tag: "tbody", animation: "200" },
+                on: { end: _vm.updateOrder },
                 model: {
                   value: _vm.album.pictures,
                   callback: function($$v) {

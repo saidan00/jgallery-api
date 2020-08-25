@@ -20,7 +20,7 @@ const actions = {
       toast('success', 'Albums loaded');
     }
 
-    commit('setAlbums', response.data.data);
+    commit('setAlbums', response.data);
   },
   async fetchAlbum({ commit }, id) {
     const response = await axios.get(`/api/albums/${id}`);
@@ -29,7 +29,7 @@ const actions = {
       toast('success', 'Album loaded');
     }
 
-    commit('setAlbum', response.data.data);
+    commit('setAlbum', response.data);
   },
   async storeAlbum({ commit }, album) {
     const response = await axios.post(`/api/albums`, album);
@@ -48,6 +48,18 @@ const actions = {
     }
 
     commit('updateAlbum', response.data);
+  },
+  // destruct object received from component
+  async updateOrderNumber({ commit }, { id, oldIndex, newIndex }) {
+    const response = await axios.put(`/api/albums/updatePicturesOrderNumber/${id}`, { oldIndex, newIndex });
+
+    console.log(response);
+
+    if (response.status === 200) {
+      toast('success', 'Album updated');
+    }
+
+    commit('updateOrderNumber');
   },
   async destroyAlbum({ commit }, id) {
     const response = await axios.delete(`/api/albums/${id}`);
@@ -96,6 +108,9 @@ const mutations = {
   updateAlbum: (state, album) => {
     state.album.title = album.title;
     state.album.coverImgLink = album.coverImgLink;
+  },
+  updateOrderNumber: (state) => {
+    console.log('OK');
   },
   destroyAlbum: () => {
     router.push({ path: '/' });

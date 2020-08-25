@@ -26,4 +26,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('albums', 'Api\AlbumsController');
 
+Route::put('albums/updatePicturesOrderNumber/{id}', 'Api\AlbumsController@updatePicturesOrderNumber');
+
 Route::resource('pictures', 'Api\PicturesController');

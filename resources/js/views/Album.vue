@@ -61,7 +61,7 @@
               <th scope="col"></th>
             </tr>
           </thead>
-          <draggable v-model="album.pictures" tag="tbody">
+          <draggable v-model="album.pictures" tag="tbody" animation="200" @end="updateOrder">
             <tr
               v-for="(picture, indexKey) in album.pictures"
               :key="picture.id"
@@ -125,6 +125,7 @@ export default {
       "destroyAlbum",
       "storePicture",
       "updatePicture",
+      "updateOrderNumber",
       "destroyPicture",
       "startLoading",
       "doneLoading",
@@ -220,6 +221,7 @@ export default {
         const picture = {
           title,
           imgLink,
+          orderNumber: this.album.pictures_count,
           album_id: this.album.id,
         };
 
@@ -248,6 +250,17 @@ export default {
           this.destroyPicture(pictureId);
         }
       });
+    },
+    updateOrder(evt) {
+      // if oldIndex === newIndex => do nothing
+      if (evt.oldIndex !== evt.newIndex) {
+        // passing object to store
+        this.updateOrderNumber({
+          id: this.album.id,
+          oldIndex: evt.oldIndex,
+          newIndex: evt.newIndex,
+        });
+      }
     },
   },
   computed: {
@@ -281,5 +294,9 @@ img {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+
+tbody tr {
+  cursor: move;
 }
 </style>
