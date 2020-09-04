@@ -21,10 +21,4 @@ class Picture extends JsonResource {
             'orderNumber' => $this->orderNumber
         ];
     }
-
-    public function with($request) {
-        return [
-            'author_url' => url('https://www.facebook.com/huy.sgh')
-        ];
-    }
 }

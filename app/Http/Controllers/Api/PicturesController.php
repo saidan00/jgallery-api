@@ -5,78 +5,79 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Picture;
+use App\Http\Resources\Picture as PictureResource;
 use Illuminate\Support\Facades\DB;
 
 class PicturesController extends Controller {
-  /**
-   * Display a listing of the resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function index() {
-    //
-  }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index() {
+        //
+    }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request) {
-    $picture = new Picture;
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request) {
+        $picture = new Picture;
 
-    $picture->title = $request->title;
-    $picture->imgLink = $request->imgLink;
-    $picture->description = $request->title;
-    $picture->orderNumber = $request->orderNumber;
-    $picture->album_id = $request->album_id;
+        $picture->title = $request->title;
+        $picture->imgLink = $request->imgLink;
+        $picture->description = $request->title;
+        $picture->orderNumber = $request->orderNumber;
+        $picture->album_id = $request->album_id;
 
-    $picture->save();
+        $picture->save();
 
-    return response($picture, 200)->header('Content-Type', 'text/plain');
-  }
+        return new PictureResource($picture);
+    }
 
-  /**
-   * Display the specified resource.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function show($id) {
-    //
-  }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id) {
+        //
+    }
 
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, $id) {
-    $picture = Picture::find($id);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id) {
+        $picture = Picture::find($id);
 
-    $picture->title = $request->title;
-    $picture->imgLink = $request->imgLink;
+        $picture->title = $request->title;
+        $picture->imgLink = $request->imgLink;
 
-    $picture->save();
-    return response($picture, 200)->header('Content-Type', 'text/plain');
-  }
+        $picture->save();
+        return new PictureResource($picture);
+    }
 
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy($id) {
-    $picture = Picture::find($id);
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id) {
+        $picture = Picture::find($id);
 
-    $picture->delete();
+        $picture->delete();
 
-    Picture::where([['album_id', $picture->album_id], ['order_number', '>', $picture->orderNumber]])->update(['orderNumber' => DB::raw('orderNumber - 1')]);
+        Picture::where([['album_id', $picture->album_id], ['order_number', '>', $picture->orderNumber]])->update(['orderNumber' => DB::raw('orderNumber - 1')]);
 
-    return response($picture, 200)->header('Content-Type', 'text/plain');
-  }
+        return new PictureResource($picture);
+    }
 }
