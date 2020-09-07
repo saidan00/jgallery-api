@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Album;
-use App\Http\Resources\Album as AlbumResource;
-use App\Picture;
-use App\Http\Resources\Picture as PictureResource;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller;
+use App\Album;
+use App\Picture;
+use App\Http\Resources\Album as AlbumResource;
+use App\Http\Resources\Picture as PictureResource;
 
 class AlbumsController extends Controller {
     /**
@@ -19,6 +20,11 @@ class AlbumsController extends Controller {
     public function index() {
         // Get pictures
         $albums = Album::withCount('pictures')->get();
+
+        if (Gate::denies('see-all-albums')) {
+            return
+                response()->caps('Access Denied', 403);
+        }
 
         return AlbumResource::collection($albums);
     }
