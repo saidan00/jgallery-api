@@ -14,7 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mixin */ "./resources/js/mixin/index.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers */ "./resources/js/helpers/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -316,7 +316,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 break;
 
               case 14:
-                Object(_mixin__WEBPACK_IMPORTED_MODULE_3__["toast"])("error", "Title and image link cannot be empty");
+                Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["toast"])("error", "Title and image link cannot be empty");
 
               case 15:
               case "end":
@@ -389,7 +389,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.faded-in[data-v-ef645540] {\r\n  -webkit-animation-name: faded-in-data-v-ef645540;\r\n          animation-name: faded-in-data-v-ef645540;\r\n  -webkit-animation-duration: 1.5s;\r\n          animation-duration: 1.5s;\n}\n@-webkit-keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\n@keyframes faded-in-data-v-ef645540 {\nfrom {\r\n    background-color: #eeeeee;\n}\nto {\r\n    background-color: #fafafa;\n}\n}\nimg[data-v-ef645540] {\r\n  width: 100px;\r\n  height: 100px;\r\n  -o-object-fit: cover;\r\n     object-fit: cover;\n}\ntbody tr[data-v-ef645540] {\r\n  cursor: move;\n}\r\n", ""]);
+exports.push([module.i, "\n.faded-in[data-v-ef645540] {\n  -webkit-animation-name: faded-in-data-v-ef645540;\n          animation-name: faded-in-data-v-ef645540;\n  -webkit-animation-duration: 1.5s;\n          animation-duration: 1.5s;\n}\n@-webkit-keyframes faded-in-data-v-ef645540 {\nfrom {\n    background-color: #eeeeee;\n}\nto {\n    background-color: #fafafa;\n}\n}\n@keyframes faded-in-data-v-ef645540 {\nfrom {\n    background-color: #eeeeee;\n}\nto {\n    background-color: #fafafa;\n}\n}\nimg[data-v-ef645540] {\n  width: 100px;\n  height: 100px;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\ntbody tr[data-v-ef645540] {\n  cursor: move;\n}\n", ""]);
 
 // exports
 

@@ -22,8 +22,7 @@ class AlbumsController extends Controller {
         $albums = Album::withCount('pictures')->get();
 
         if (Gate::denies('see-all-albums')) {
-            return
-                response()->caps('Access Denied', 403);
+            return response()->caps('Access Denied', 403);
         }
 
         return AlbumResource::collection($albums);

@@ -105,7 +105,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import draggable from "vuedraggable";
-import { toast } from "../mixin";
+import { toast } from "../helpers";
 
 export default {
   name: "Album",

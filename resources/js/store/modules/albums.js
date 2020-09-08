@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from '../../mixin';
+import { toast } from '../../helpers';
 import router from '../../router';
 
 const state = {
