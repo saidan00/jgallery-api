@@ -20,6 +20,9 @@ const routes = [{
   path: '/albums',
   name: 'Gallery',
   component: Gallery,
+  meta: {
+    requiresAuth: true
+  }
 }];
 
 const router = new VueRouter({

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getCookie} from './index';
+import { getCookie } from './index';
 
 export function getUser() {
   return getCookie('user');

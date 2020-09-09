@@ -16,6 +16,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { loadProgressBar } from "axios-progress-bar";
 import "axios-progress-bar/dist/nprogress.css";
 
+import { initialize } from "./helpers";
+
 /* sweetalert2 */
 const optionsSweetalert2 = {
   confirmButtonColor: '#41b882',
@@ -28,6 +30,8 @@ Vue.use(VueSweetalert2, optionsSweetalert2);
 /* axios-progress-bar */
 loadProgressBar();
 /* axios-progress-bar */
+
+initialize(router);
 
 Vue.config.productionTip = false;
 

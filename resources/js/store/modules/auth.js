@@ -20,8 +20,8 @@ const getters = {
 const actions = {
   async login({ commit }, credentials) {
     axios.post('/api/auth/login', credentials).then(response => {
-      commit('loginSuccess', response);
-    })
+        commit('loginSuccess', response.data);
+      })
       .catch(error => {
         commit('loginFailed', error.response.data);
       });
@@ -31,7 +31,7 @@ const actions = {
 const mutations = {
   loginSuccess: (state, payload) => {
     state.authError = null;
-    state.currentUser = {...payload};
+    state.currentUser = {...payload };
 
     setAuthorization(state.currentUser.access_token);
     setCookie('user', JSON.stringify(state.currentUser), state.currentUser.expires_in, COOKIE_PATH);

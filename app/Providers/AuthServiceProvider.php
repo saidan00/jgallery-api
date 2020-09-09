@@ -23,14 +23,14 @@ class AuthServiceProvider extends ServiceProvider {
      */
     public function boot() {
         $this->registerPolicies();
-        $this->registerAlbumPolicies();
+        // $this->registerAlbumPolicies();
 
         //
     }
 
-    public function registerAlbumPolicies() {
-        Gate::define('see-all-albums', function ($user) {
-            return ($user->email == 'jaysgh94@abc.com');
-        });
-    }
+    // public function registerAlbumPolicies() {
+    //     Gate::define('see-all-albums', function ($user) {
+    //         return ($user->email == 'jaysgh94@abc.com');
+    //     });
+    // }
 }

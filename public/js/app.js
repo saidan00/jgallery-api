@@ -35045,11 +35045,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios_progress_bar__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(axios_progress_bar__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var axios_progress_bar_dist_nprogress_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! axios-progress-bar/dist/nprogress.css */ "./node_modules/axios-progress-bar/dist/nprogress.css");
 /* harmony import */ var axios_progress_bar_dist_nprogress_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios_progress_bar_dist_nprogress_css__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers/index.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 
 
 
@@ -35073,6 +35075,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_sweetalert2__WEBPACK_IMPORTED
 Object(axios_progress_bar__WEBPACK_IMPORTED_MODULE_7__["loadProgressBar"])();
 /* axios-progress-bar */
 
+Object(_helpers__WEBPACK_IMPORTED_MODULE_9__["initialize"])(_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.config.productionTip = false;
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -35096,7 +35099,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_URL", function() { return API_URL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COOKIE_PATH", function() { return COOKIE_PATH; });
 var API_URL = 'jgallery.test';
-var COOKIE_PATH = '/jgallery';
+var COOKIE_PATH = '/';
 
 /***/ }),
 
@@ -35198,7 +35201,7 @@ function setAuthorization(token) {
 /*!***************************************!*\
   !*** ./resources/js/helpers/index.js ***!
   \***************************************/
-/*! exports provided: toast, setCookie, getCookie, checkCookie */
+/*! exports provided: toast, setCookie, getCookie, checkCookie, initialize */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35207,10 +35210,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setCookie", function() { return setCookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookie", function() { return getCookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkCookie", function() { return checkCookie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialize", function() { return initialize; });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
 
-function toast(icon, message) {
+
+
+
+var toast = function toast(icon, message) {
   vue__WEBPACK_IMPORTED_MODULE_0___default.a.swal({
     toast: true,
     position: "top-end",
@@ -35220,20 +35230,23 @@ function toast(icon, message) {
     icon: icon,
     title: message
   });
-}
-function setCookie(cname, cvalue, extime) {
+};
+
+var setCookie = function setCookie(cname, cvalue, extime) {
   var path = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '/';
   var d = new Date();
   d.setTime(d.getTime() + extime);
   var expires = "expires=" + d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=" + path;
-}
-function getCookie(cname) {
+};
+
+var getCookie = function getCookie(cname) {
   var name = cname + "="; // Decode the cookie string, to handle cookies with special characters, e.g. '$'
 
   var decodedCookie = decodeURIComponent(document.cookie); // Split document.cookie on semicolons into an array called ca
 
-  var ca = decodedCookie.split(';'); // Loop through the ca array
+  var ca = decodedCookie.split(';');
+  console.log(document.cookie); // Loop through the ca array
 
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
@@ -35250,9 +35263,10 @@ function getCookie(cname) {
   } // If the cookie is not found
 
 
-  return "";
-}
-function checkCookie(cname) {
+  return null;
+};
+
+var checkCookie = function checkCookie(cname) {
   var cvalue = getCookie(cname);
 
   if (cvalue != "") {
@@ -35260,7 +35274,40 @@ function checkCookie(cname) {
     console.log(cname + " = " + cvalue);
   } else {// Cookie doesn't exist
   }
-}
+}; // check if logged in
+
+
+var initialize = function initialize(router) {
+  router.beforeEach(function (to, from, next) {
+    var requiresAuth = to.matched.some(function (record) {
+      return record.meta.requiresAuth;
+    });
+    var currentUser = getCookie('user');
+    console.log(currentUser); // if route require login and user not logged in yet
+
+    if (requiresAuth && !currentUser) {
+      next('/');
+    } else if (to.path == '/' && currentUser) {
+      next('/albums');
+    } else {
+      next();
+    }
+  });
+  axios__WEBPACK_IMPORTED_MODULE_1___default.a.interceptors.response.use(null, function (error) {
+    if (error.resposne.status == 401) {
+      _store__WEBPACK_IMPORTED_MODULE_2__["default"].commit('logout');
+      router.push('/login');
+    }
+
+    return Promise.reject(error);
+  });
+
+  if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getCurrentUser) {
+    setAuthorization(_store__WEBPACK_IMPORTED_MODULE_2__["default"].getCurrentUser.access_token);
+  }
+};
+
+
 
 /***/ }),
 
@@ -35321,7 +35368,10 @@ var routes = [{
 }, {
   path: '/albums',
   name: 'Gallery',
-  component: _views_Gallery__WEBPACK_IMPORTED_MODULE_2__["default"]
+  component: _views_Gallery__WEBPACK_IMPORTED_MODULE_2__["default"],
+  meta: {
+    requiresAuth: true
+  }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
@@ -35768,7 +35818,7 @@ var actions = {
             case 0:
               commit = _ref.commit;
               axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/auth/login', credentials).then(function (response) {
-                commit('loginSuccess', response);
+                commit('loginSuccess', response.data);
               })["catch"](function (error) {
                 commit('loginFailed', error.response.data);
               });
