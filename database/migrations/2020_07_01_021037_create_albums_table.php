@@ -11,11 +11,11 @@ class CreateAlbumTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('album', function (Blueprint $table) {
+        Schema::create('albums', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->string('coverImgLink');
+            $table->text('description')->nullable();
+            $table->string('cover_img_link');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ class CreateAlbumTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('album');
+        Schema::dropIfExists('albums');
     }
 }

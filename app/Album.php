@@ -14,6 +14,6 @@ class Album extends Model {
     }
 
     public function pictures() {
-        return $this->hasMany('App\Picture', 'album_id');
+        return $this->hasMany('App\Picture', 'album_id')->orderBy('order_number');
     }
 }

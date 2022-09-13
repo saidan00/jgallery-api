@@ -47,8 +47,7 @@ class AlbumsController extends Controller {
         $album = new Album;
 
         $album->title = $request->title;
-        $album->coverImgLink = $request->coverImgLink;
-        $album->description = $request->title;
+        $album->cover_img_link = $request->cover_img_link;
 
         $album->save();
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AlbumsController;
+use App\Http\Controllers\PicturesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* 
+/*
 Route::get(/users/{id}, function($id) {
   return $id;
 })
 */
 
-Route::get('/{vue_capture?}', function () {
- return view('index');
-})->where('vue_capture', '[\/\w\.-]*');
+// Route::get('/{vue_capture?}', function () {
+//  return view('index');
+// })->where('vue_capture', '[\/\w\.-]*');
 
 // Route::get('/', function () {
 //   return view('welcome');
@@ -36,4 +38,18 @@ Route::get('/{vue_capture?}', function () {
 
 // Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', [AlbumsController::class, 'index']);
+
+Route::group(['prefix' => 'albums'], function ($router) {
+    Route::get('/{id}', [AlbumsController::class, 'show'])->name('albums-show');
+    Route::get('/edit/{id}', [AlbumsController::class, 'edit'])->name('albums-edit');
+    Route::post('/update/{id}', [AlbumsController::class, 'update']);
+});
+
+
+Route::group(['prefix' => 'pictures'], function ($router) {
+    Route::post('/create-many', [PicturesController::class, 'createMany']);
+    Route::get('/edit/{id}', [PicturesController::class, 'edit'])->name('pictures-edit');
+    Route::post('/update/{id}', [PicturesController::class, 'update']);
+    Route::post('/update-order/{id}', [PicturesController::class, 'updatePictureOrderNumber']);
+});

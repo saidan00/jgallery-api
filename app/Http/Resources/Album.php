@@ -18,7 +18,7 @@ class Album extends JsonResource {
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'coverImgLink' => $this->coverImgLink,
+            'cover_img_link' => $this->cover_img_link,
             'pictures_count' => $this->pictures_count,
             'pictures' => PictureResource::collection($this->pictures)
         ];

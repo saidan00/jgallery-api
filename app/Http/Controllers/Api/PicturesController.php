@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Album;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Picture;
+use App\Http\Resources\Album as AlbumResource;
 use App\Http\Resources\Picture as PictureResource;
+use App\Picture;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PicturesController extends Controller {
+class PicturesController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         //
     }
 
@@ -24,18 +28,34 @@ class PicturesController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $picture = new Picture;
 
         $picture->title = $request->title;
-        $picture->imgLink = $request->imgLink;
-        $picture->description = $request->title;
-        $picture->orderNumber = $request->orderNumber;
+        $picture->img_link = $request->img_link;
         $picture->album_id = $request->album_id;
 
         $picture->save();
 
         return new PictureResource($picture);
+    }
+
+    public function createMany(Request $request)
+    {
+        $album = Album::find($request->album_id);
+
+        foreach ($request->img_links as $img_link) {
+            $picture = new Picture;
+
+            $picture->title = $album->title;
+            $picture->img_link = $img_link;
+            $picture->album_id = $album->id;
+
+            $picture->save();
+        }
+
+        return new AlbumResource($album);
     }
 
     /**
@@ -44,7 +64,8 @@ class PicturesController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -55,7 +76,8 @@ class PicturesController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $picture = Picture::find($id);
 
         $picture->title = $request->title;
@@ -71,7 +93,8 @@ class PicturesController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $picture = Picture::find($id);
 
         $picture->delete();

@@ -27,9 +27,13 @@ Route::group(['prefix' => 'auth'], function ($router) {
 // Get single album
 // Route::get('albums/{id}', 'Api\AlbumsController@show');
 
-Route::middleware('auth:api')->resource('albums', 'Api\AlbumsController');
+Route::resource('albums', 'Api\AlbumsController');
 
 
 Route::put('albums/updatePicturesOrderNumber/{id}', 'Api\AlbumsController@updatePicturesOrderNumber');
 
 Route::resource('pictures', 'Api\PicturesController');
+
+Route::group(['prefix' => 'pictures'], function ($router) {
+    Route::post('create-many', 'Api\PicturesController@createMany');
+});
