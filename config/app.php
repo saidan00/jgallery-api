@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Kreait\Laravel\Firebase\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -175,7 +176,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\ResponseMacroServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*

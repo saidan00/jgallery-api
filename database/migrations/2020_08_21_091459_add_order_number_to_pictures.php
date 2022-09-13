@@ -12,7 +12,7 @@ class AddOrderNumberToPictures extends Migration {
      */
     public function up() {
         Schema::table('pictures', function (Blueprint $table) {
-            $table->integer('orderNumber');
+            $table->integer('order_number');
         });
     }
 
@@ -23,7 +23,7 @@ class AddOrderNumberToPictures extends Migration {
      */
     public function down() {
         Schema::table('pictures', function (Blueprint $table) {
-            $table->dropColumn('orderNumber');
+            $table->dropColumn('order_number');
         });
     }
 }

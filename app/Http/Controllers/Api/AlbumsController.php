@@ -2,30 +2,29 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use App\Http\Controllers\Controller;
 use App\Album;
-use App\Picture;
+use App\Http\Controllers\FirebaseController;
 use App\Http\Resources\Album as AlbumResource;
 use App\Http\Resources\Picture as PictureResource;
+use App\Picture;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-class AlbumsController extends Controller {
+class AlbumsController extends FirebaseController
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         // Get pictures
-        $albums = Album::withCount('pictures')->get();
+        $albums = $this->database->getReference()->getSnapshot()->getValue();
 
-        // if (Gate::denies('see-all-albums')) {
-        //     return response()->caps('Access Denied', 403);
-        // }
-
-        return AlbumResource::collection($albums);
+        return json_encode($albums);
     }
 
     /**
@@ -33,7 +32,8 @@ class AlbumsController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -43,7 +43,8 @@ class AlbumsController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $album = new Album;
 
         $album->title = $request->title;
@@ -60,7 +61,8 @@ class AlbumsController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         // Get picture
         $album = Album::withCount('pictures')->find($id);
         $album->pictures = $album->pictures->sortBy('order_number');
@@ -79,7 +81,8 @@ class AlbumsController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         //
     }
 
@@ -90,7 +93,8 @@ class AlbumsController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $album = Album::find($id);
 
         $album->title = $request->title;
@@ -100,7 +104,8 @@ class AlbumsController extends Controller {
         return new AlbumResource($album);
     }
 
-    public function updatePicturesOrderNumber(Request $request, $id) {
+    public function updatePicturesOrderNumber(Request $request, $id)
+    {
         // get picture
         $picture = Picture::where([['album_id', $id], ['order_number', $request->oldIndex]])->first();
 
@@ -124,7 +129,8 @@ class AlbumsController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $album = Album::find($id);
 
         $album->delete();

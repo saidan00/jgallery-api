@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumsController;
+use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\PicturesController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,10 +47,13 @@ Route::group(['prefix' => 'albums'], function ($router) {
     Route::post('/update/{id}', [AlbumsController::class, 'update']);
 });
 
-
 Route::group(['prefix' => 'pictures'], function ($router) {
     Route::post('/create-many', [PicturesController::class, 'createMany']);
     Route::get('/edit/{id}', [PicturesController::class, 'edit'])->name('pictures-edit');
     Route::post('/update/{id}', [PicturesController::class, 'update']);
     Route::post('/update-order/{id}', [PicturesController::class, 'updatePictureOrderNumber']);
+});
+
+Route::group(['prefix' => 'firebase'], function ($router) {
+    Route::get('/', [FirebaseController::class, 'index']);
 });

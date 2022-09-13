@@ -25,7 +25,7 @@ class PicturesController extends Controller
                 $picture->img_link = $img_link;
                 $picture->album_id = $album->id;
 
-                $picture->order_number = Picture::where('album_id', $album->id)->max('order_number') + 1;
+                $picture->orderNumber = Picture::where('album_id', $album->id)->max('order_number') + 1;
 
                 $picture->save();
             }
