@@ -18,14 +18,14 @@
             <div class="card card-body mb-3" style="height:165px">
                 <div class="row h-100">
                     <div class="col-sm-4 col-lg-2 h-100">
-                        <img src="{{ $album->cover_img_link }}" class="w-100 rounded cover-img h-100" style="object-fit:cover" />
+                        <img src="{{ $album['cover_img_link'] }}" class="w-100 rounded cover-img h-100" style="object-fit:cover" />
                     </div>
                     <div class="col-sm-8 col-lg-10 h-100">
                         <div class="card-title align-middle">
                             <h2>
-                                <a href="/albums/{{ $album->id }}">{{ $album->title }}</a>
+                                <a href="/albums/{{ $album['id'] }}">{{ $album['title'] }}</a>
                             </h2>
-                            <small>{{ $album->pictures_count }} pictures</small>
+                            <small>{{ $album['pictures_count'] }} pictures</small>
                         </div>
                     </div>
                 </div>

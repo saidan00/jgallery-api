@@ -24,7 +24,7 @@ class AlbumsController extends FirebaseController
         // Get pictures
         $albums = $this->database->getReference()->getSnapshot()->getValue();
 
-        return json_encode($albums);
+        return AlbumResource::collection($albums);
     }
 
     /**

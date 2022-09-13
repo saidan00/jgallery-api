@@ -14,11 +14,11 @@ class Picture extends JsonResource {
     public function toArray($request) {
         // return parent::toArray($request);
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'img_link' => $this->img_link,
-            'order_number' => $this->order_number
+            'id' => $this['id'],
+            'title' => $this['title'],
+            // 'description' => $this['description'],
+            'img_link' => $this['img_link'],
+            'order_number' => $this['order_number']
         ];
     }
 }

@@ -3,29 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Album;
+use App\Http\Traits\ArrayToObject;
 use Illuminate\Http\Request;
 
-class AlbumsController extends Controller
+class AlbumsController extends FirebaseController
 {
+    use ArrayToObject;
+
     public function index()
     {
         // Get albums
-        $albums = Album::withCount('pictures')->get();
+        $albums = $this->database->getReference('/albums')
+            ->getSnapshot()
+            ->getValue();
 
         return view('albums.index')->with(['albums' => $albums]);
     }
 
 
-    public function show($id)
+    public function show(int $id)
     {
-        $album = Album::withCount('pictures')->find($id);
+        $albums = $this->database->getReference('/albums')
+            ->orderByChild("id")
+            ->equalTo($id)
+            ->getSnapshot()
+            ->getValue();
+        $album = array_pop($albums);
+        // dd($album);
 
         return view('albums.show')->with(['album' => $album]);
     }
 
     public function edit($id)
     {
-        $album = Album::find($id);
+        $album = $this->database->getReference($id)->getSnapshot()->getValue();
+        $album = $this->array_to_object($album);
 
         return view('albums.edit')->with(['album' => $album]);
     }
