@@ -40,20 +40,21 @@ Route::get(/users/{id}, function($id) {
 // Auth::routes();
 
 Route::get('/', [AlbumsController::class, 'index']);
+Route::get('/albums', [AlbumsController::class, 'index'])->name('albums');
 
 Route::group(['prefix' => 'albums'], function ($router) {
-    Route::get('/{id}', [AlbumsController::class, 'show'])->name('albums-show');
+    Route::get('/create', [AlbumsController::class, 'create'])->name('albums-create');
     Route::get('/edit/{id}', [AlbumsController::class, 'edit'])->name('albums-edit');
+    Route::get('/{id}', [AlbumsController::class, 'show'])->name('albums-show');
+    Route::post('/store', [AlbumsController::class, 'store'])->name('albums-store');
     Route::post('/update/{id}', [AlbumsController::class, 'update']);
+    Route::post('/delete/{id}', [AlbumsController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'pictures'], function ($router) {
     Route::post('/create-many', [PicturesController::class, 'createMany']);
-    Route::get('/edit/{id}', [PicturesController::class, 'edit'])->name('pictures-edit');
-    Route::post('/update/{id}', [PicturesController::class, 'update']);
+    Route::get('/edit/{albumId}/{pictureId}', [PicturesController::class, 'edit'])->name('pictures-edit');
+    Route::post('/update/{albumId}/{pictureId}', [PicturesController::class, 'update']);
     Route::post('/update-order/{id}', [PicturesController::class, 'updatePictureOrderNumber']);
-});
-
-Route::group(['prefix' => 'firebase'], function ($router) {
-    Route::get('/', [FirebaseController::class, 'index']);
+    Route::post('/delete/{albumId}/{pictureId}', [PicturesController::class, 'destroy']);
 });

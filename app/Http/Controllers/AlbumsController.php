@@ -2,55 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Album;
-use App\Http\Traits\ArrayToObject;
+use App\Repositories\AlbumRepository;
 use Illuminate\Http\Request;
 
-class AlbumsController extends FirebaseController
+class AlbumsController extends Controller
 {
-    use ArrayToObject;
+    protected $albumRepo;
+
+    public function __construct(AlbumRepository $albumRepository)
+    {
+        $this->albumRepo = $albumRepository;
+    }
 
     public function index()
     {
         // Get albums
-        $albums = $this->database->getReference('/albums')
-            ->getSnapshot()
-            ->getValue();
+        $albums = $this->albumRepo->getAll();
 
         return view('albums.index')->with(['albums' => $albums]);
     }
 
-
-    public function show(int $id)
+    public function show($id)
     {
-        $albums = $this->database->getReference('/albums')
-            ->orderByChild("id")
-            ->equalTo($id)
-            ->getSnapshot()
-            ->getValue();
-        $album = array_pop($albums);
-        // dd($album);
+        $album = $this->albumRepo->find($id);
 
         return view('albums.show')->with(['album' => $album]);
     }
 
+    public function create()
+    {
+        return view('albums.create');
+    }
+
+    public function store(Request $request)
+    {
+        $album = [
+            'title' => $request->title,
+            'cover_img_link' => $request->cover_img_link,
+            'pictures_count' => 0
+        ];
+        $album = $this->albumRepo->create($album);
+
+        return redirect()->route('albums-edit', $album['id']);
+    }
+
     public function edit($id)
     {
-        $album = $this->database->getReference($id)->getSnapshot()->getValue();
-        $album = $this->array_to_object($album);
+        $album = $this->albumRepo->find($id);
 
         return view('albums.edit')->with(['album' => $album]);
     }
 
     public function update(Request $request, $id)
     {
-        $album = Album::find($id);
+        $album = [
+            'title' => $request->title,
+            'cover_img_link' => $request->cover_img_link
+        ];
 
-        $album->title = $request->title;
-        $album->cover_img_link = $request->cover_img_link;
+        $this->albumRepo->update($id, $album);
 
-        $album->save();
+        return redirect()->route('albums-edit', $id);
+    }
 
-        return redirect()->route('albums-edit', $album->id);
+    public function destroy($id) {
+        $this->albumRepo->delete($id);
+
+        return redirect()->route('albums');
     }
 }
