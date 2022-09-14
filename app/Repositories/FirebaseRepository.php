@@ -102,7 +102,7 @@ abstract class FirebaseRepository
         return $this->_reference->getChild($id)->remove();
     }
 
-    private function setItemId(Reference $itemRef)
+    protected function setItemId(Reference $itemRef)
     {
         $snapShot = $itemRef->getSnapshot();
         $item = $snapShot->getValue();

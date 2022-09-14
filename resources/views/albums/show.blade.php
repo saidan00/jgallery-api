@@ -57,12 +57,12 @@
                     </thead>
                     </tbody>
                     @if (isset($album['pictures']))
-                        @foreach ($album['pictures'] as $index => $picture)
+                        @foreach ($album['pictures'] as $key => $picture)
                             @if (isset($picture))
                                 <tr>
                                     <th scope="row" class="align-middle text-center" style="width:7%" id="{{ $picture['order_number'] }}">
                                         @if (!$loop->first)
-                                            <form action="/pictures/update-order/{{ $picture['id'] }}" method="POST">
+                                            <form action="/pictures/update-order/{{ $key }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="new_index" value="{{ $picture['order_number'] - 1 }}">
                                                 <input type="submit" value="▲" class="mb-1 btn btn-light"><br>
@@ -72,7 +72,7 @@
                                         <input type="text" maxlength="4" size="3" value={{ $picture['order_number'] }} class="form-control mb-1">
 
                                         @if (!$loop->last)
-                                            <form action="/pictures/update-order/{{ $picture['id'] }}" method="POST">
+                                            <form action="/pictures/update-order/{{ $key }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="new_index" value="{{ $picture['order_number'] + 1 }}">
                                                 <input type="submit" value="▼" class="btn btn-light">
@@ -87,11 +87,11 @@
                                     <td class="align-middle content">{{ $picture['img_link'] }}</td>
 
                                     <td class="align-middle content" style="width:5%">
-                                        <form action="/pictures/edit/{{ $album['id'] }}/{{ $picture['id'] }}" method="get">
+                                        <form action="/pictures/edit/{{ $key }}" method="get">
                                             @csrf
                                             <input type="submit" value="Edit" class="btn btn-primary w-100 mb-1">
                                         </form>
-                                        <form action="/pictures/delete/{{ $album['id'] }}/{{ $picture['id'] }}" method="post">
+                                        <form action="/pictures/delete/{{ $key }}" method="post">
                                             @csrf
                                             <input type="submit" value="Delete" class="btn btn-danger w-100 mb-1">
                                         </form>

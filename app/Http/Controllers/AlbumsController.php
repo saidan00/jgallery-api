@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\AlbumRepository;
+use App\Repositories\PictureRepository;
 use Illuminate\Http\Request;
 
 class AlbumsController extends Controller
 {
     protected $albumRepo;
+    protected $pictureRepo;
 
-    public function __construct(AlbumRepository $albumRepository)
+    public function __construct(AlbumRepository $albumRepository, PictureRepository $pictureRepository)
     {
         $this->albumRepo = $albumRepository;
+        $this->pictureRepo = $pictureRepository;
     }
 
     public function index()
@@ -25,6 +28,7 @@ class AlbumsController extends Controller
     public function show($id)
     {
         $album = $this->albumRepo->find($id);
+        $album['pictures'] = $this->pictureRepo->getByAlbumId($id);
 
         return view('albums.show')->with(['album' => $album]);
     }

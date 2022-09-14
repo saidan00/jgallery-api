@@ -53,7 +53,7 @@ Route::group(['prefix' => 'albums'], function ($router) {
 
 Route::group(['prefix' => 'pictures'], function ($router) {
     Route::post('/create-many', [PicturesController::class, 'createMany']);
-    Route::get('/edit/{albumId}/{pictureId}', [PicturesController::class, 'edit'])->name('pictures-edit');
+    Route::get('/edit/{pictureId}', [PicturesController::class, 'edit'])->name('pictures-edit');
     Route::post('/update/{albumId}/{pictureId}', [PicturesController::class, 'update']);
     Route::post('/update-order/{id}', [PicturesController::class, 'updatePictureOrderNumber']);
     Route::post('/delete/{albumId}/{pictureId}', [PicturesController::class, 'destroy']);

@@ -4,52 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Album;
 use App\Picture;
+use App\Repositories\PictureRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PicturesController extends Controller
 {
+    protected $pictureRepo;
+
+    public function __construct(PictureRepository $pictureRepository)
+    {
+        $this->pictureRepo = $pictureRepository;
+    }
+
     public function createMany(Request $request)
     {
-        $album = Album::withCount('pictures')->find($request->album_id);
-
+        $albumId = $request->album_id;
         $img_links = preg_split("/\r\n|\n|\r/", $request->img_links);
 
+        $pictures = $this->pictureRepo->getByAlbumId($albumId);
+        $picturesCount = count($pictures);
+
         foreach ($img_links as $img_link) {
-            $exists = Picture::where('img_link', $img_link)->where('album_id', $album->id)->exists();
+            $exists = false;
+
+            foreach ($pictures as $pic) {
+                if ($pic['img_link'] == $img_link) {
+                    $exists = true;
+                }
+            }
 
             if (!$exists) {
-                $picture = new Picture;
+                $picturesCount++;
+                $newPic = [
+                    'img_link' => $img_link,
+                    'album_id' => $albumId,
+                    'order_number' => $picturesCount
+                ];
 
-                $picture->title = $album->title;
-                $picture->img_link = $img_link;
-                $picture->album_id = $album->id;
-
-                $picture->orderNumber = Picture::where('album_id', $album->id)->max('order_number') + 1;
-
-                $picture->save();
+                $this->pictureRepo->create($newPic);
             }
         }
 
-        return redirect()->route('albums-show', $album->id);
+        return redirect()->route('albums-show', $albumId);
     }
 
-    public function edit($id)
+    public function edit($pictureId)
     {
-        $picture = Picture::find($id);
-
+        $picture = $this->pictureRepo->find($pictureId);
         return view('pictures.edit')->with(['picture' => $picture]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $albumId, $pictureId)
     {
-        $picture = Picture::find($id);
+        $picture = [
+            'img_link' => $request->img_link
+        ];
 
-        $picture->img_link = $request->img_link;
+        $this->pictureRepo->update($pictureId, $picture);
 
-        $picture->save();
-
-        return redirect()->route('pictures-edit', $picture->id);
+        return redirect()->route('pictures-edit', $pictureId);
     }
 
     public function updatePictureOrderNumber(Request $request, $id)
@@ -77,16 +92,33 @@ class PicturesController extends Controller
         return redirect()->route('albums-show', [$picture->album_id, '#' . $picture->order_number]);
     }
 
-    public function destroy($id)
+    public function destroy(int $albumId, int $pictureId)
     {
-        $picture = Picture::find($id);
+        $albums = $this->database->getReference($this->firebaseReference)
+            ->orderByChild('id')
+            ->equalTo($albumId)
+            ->getSnapshot()
+            ->getValue();
+        $albumKey = key($albums);
+        $album = array_pop($albums);
 
-        $picture->delete();
+        $picture = null;
+        foreach ($album['pictures'] as $key => $p) {
+            if ($p != null) {
+                if ($p['id'] == $pictureId) {
+                    $picture = $p;
+                    $pictureKey = $key;
+                    $picture['album_id'] = $albumId;
+                }
+            }
+        }
 
-        Picture::where([['album_id', $picture->album_id], ['order_number', '>', $picture->order_number]])->update(['orderNumber' => DB::raw('orderNumber - 1')]);
+        try {
+            $this->database->getReference("{$this->firebaseReference}/{$albumKey}/pictures/{$pictureKey}")->remove();
+        } catch (Exception $exception) {
+            dd($exception);
+        }
 
-        $album = Album::withCount('pictures')->find($picture->album_id);
-
-        return view('albums.show')->with(['album' => $album]);
+        return redirect()->route('pictures-edit', [$albumId, $pictureId]);
     }
 }
