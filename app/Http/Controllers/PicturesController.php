@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Album;
-use App\Picture;
+use App\Repositories\AlbumRepository;
 use App\Repositories\PictureRepository;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PicturesController extends Controller
 {
+    protected $albumRepo;
     protected $pictureRepo;
 
-    public function __construct(PictureRepository $pictureRepository)
+    public function __construct(AlbumRepository $albumRepository, PictureRepository $pictureRepository)
     {
+        $this->albumRepo = $albumRepository;
         $this->pictureRepo = $pictureRepository;
     }
 
@@ -47,13 +46,17 @@ class PicturesController extends Controller
             }
         }
 
+        // update album pictures_count
+        $this->albumRepo->update($albumId, ['pictures_count' => $picturesCount]);
+
         return redirect()->route('albums-show', $albumId);
     }
 
     public function edit($pictureId)
     {
         $picture = $this->pictureRepo->find($pictureId);
-        return view('pictures.edit')->with(['picture' => $picture]);
+        $album = $this->albumRepo->find($picture['album_id']);
+        return view('pictures.edit')->with(['picture' => $picture, 'album' => $album]);
     }
 
     public function update(Request $request, $albumId, $pictureId)
@@ -70,55 +73,49 @@ class PicturesController extends Controller
     public function updatePictureOrderNumber(Request $request, $id)
     {
         // get picture
-        $picture = Picture::find($id);
-        $maxOrderNumber = Picture::where('album_id', $picture->album_id)->max('order_number');
+        $picture = $this->pictureRepo->find($id);
+        $pictures = $this->pictureRepo->getByAlbumId($picture['album_id']);
+        $album = $this->albumRepo->find($picture['album_id']);
 
-        $oldIndex = $picture->order_number;
+        $oldIndex = $picture['order_number'];
         $newIndex = $request->new_index;
 
-        if ($newIndex > 0 && $newIndex < $maxOrderNumber + 1) {
+        if ($newIndex > 0 && $newIndex < $album['pictures_count'] + 1) {
             // update new order number for the rest
             if ($newIndex > $oldIndex) {
-                Picture::where('album_id', $picture->album_id)->whereBetween('order_number', [$oldIndex + 1, $newIndex])->update(['order_number' => DB::raw('order_number - 1')]);
+                $pictures = collect($pictures)->filter(function ($value, $key) use ($newIndex, $oldIndex) {
+                    return ($oldIndex + 1 <= $value["order_number"] && $value["order_number"] <= $newIndex);
+                });
+
+                foreach ($pictures as $key => $pic) {
+                    $this->pictureRepo->update($key, ['order_number' => $pic['order_number'] - 1]);
+                }
             } elseif ($newIndex < $oldIndex) {
-                Picture::where('album_id', $picture->album_id)->whereBetween('order_number', [$newIndex, $oldIndex - 1])->update(['order_number' => DB::raw('order_number + 1')]);
-            }
-        }
+                $pictures = collect($pictures)->filter(function ($value, $key) use ($newIndex, $oldIndex) {
+                    return ($newIndex <= $value["order_number"] && $value["order_number"] <= $oldIndex - 1);
+                });
 
-        // update order number
-        $picture->order_number = $newIndex;
-        $picture->save();
-
-        return redirect()->route('albums-show', [$picture->album_id, '#' . $picture->order_number]);
-    }
-
-    public function destroy(int $albumId, int $pictureId)
-    {
-        $albums = $this->database->getReference($this->firebaseReference)
-            ->orderByChild('id')
-            ->equalTo($albumId)
-            ->getSnapshot()
-            ->getValue();
-        $albumKey = key($albums);
-        $album = array_pop($albums);
-
-        $picture = null;
-        foreach ($album['pictures'] as $key => $p) {
-            if ($p != null) {
-                if ($p['id'] == $pictureId) {
-                    $picture = $p;
-                    $pictureKey = $key;
-                    $picture['album_id'] = $albumId;
+                foreach ($pictures as $key => $pic) {
+                    $this->pictureRepo->update($key, ['order_number' => $pic['order_number'] + 1]);
                 }
             }
         }
 
-        try {
-            $this->database->getReference("{$this->firebaseReference}/{$albumKey}/pictures/{$pictureKey}")->remove();
-        } catch (Exception $exception) {
-            dd($exception);
-        }
+        // update order number
+        $this->pictureRepo->update($id, ['order_number' => $newIndex]);
 
-        return redirect()->route('pictures-edit', [$albumId, $pictureId]);
+        return redirect()->route('albums-show', [$picture['album_id'], '#' . $newIndex]);
+    }
+
+    public function destroy($id)
+    {
+        // update album pictures_count
+        $picture = $this->pictureRepo->find($id);
+        $album = $this->albumRepo->find($picture['album_id']);
+        $this->albumRepo->update($album['id'], ['pictures_count' => $album['pictures_count'] - 1]);
+
+        $this->pictureRepo->delete($id);
+
+        return redirect()->back();
     }
 }

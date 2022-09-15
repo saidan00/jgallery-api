@@ -69,7 +69,13 @@ class AlbumsController extends Controller
         return redirect()->route('albums-edit', $id);
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
+        $pictures = $this->pictureRepo->getByAlbumId($id);
+        foreach ($pictures as $key => $pic) {
+            $this->pictureRepo->delete($key);
+        }
+
         $this->albumRepo->delete($id);
 
         return redirect()->route('albums');

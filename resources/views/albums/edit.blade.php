@@ -6,7 +6,7 @@
     </a>
 
     <div class="form-group">
-        <h3>Album {{ $album['id'] }}</h3>
+        <h3>Album: {{ $album['title'] }}</h3>
         <form action="/albums/update/{{ $album['id'] }}" method="post">
             @csrf
             <input class="form-control mb-3" placeholder="Title" name="title" value="{{ $album['title'] }}" required>
